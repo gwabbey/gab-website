@@ -33,7 +33,7 @@ export default function Index() {
         <div style={{fontFamily: "system-ui, sans-serif", lineHeight: "1.8"}}>
             <Flex
                 mih={50}
-                gap="sm"
+                gap="xl"
                 justify="center"
                 align="center"
                 direction="column"
@@ -57,7 +57,6 @@ export default function Index() {
                                 justify="center"
                                 leftSection={icon}
                                 variant={hovered ? "outline" : "default"}
-                                mt="md"
                                 color={color}
                                 radius="xl"
                                 style={{transition: 'all 0.2s ease'}}
