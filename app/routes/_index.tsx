@@ -10,8 +10,13 @@ export const meta: MetaFunction = () => {
     ];
 };
 
+const buttons = [
+    {label: 'Spotify', icon: <IconBrandSpotify size={32}/>, color: 'green'},
+    {label: 'YouTube', icon: <IconBrandYoutube size={32}/>, color: 'red'},
+    {label: 'Bandcamp', icon: <IconBrandBandcamp size={32}/>, color: 'blue'},
+];
+
 export default function Index() {
-    const {hovered, ref} = useHover();
     return (
         <div style={{fontFamily: "system-ui, sans-serif", lineHeight: "1.8"}}>
             <Flex
@@ -28,22 +33,25 @@ export default function Index() {
                     WebkitTextFillColor: 'transparent',
                     fontWeight: 700
                 }}>gab</h1>
-                <div ref={ref}>
-                    <Button size="xl" justify="center" leftSection={<IconBrandSpotify size={32}/>}
-                            variant={hovered ? "outline" : "default"} mt="md" color="green"
-                            radius="xl">
-                        Spotify
-                    </Button>
-                </div>
-                <Button size="xl" justify="center" leftSection={<IconBrandYoutube size={32}/>} variant="default" mt="md"
-                        radius="xl">
-                    YouTube
-                </Button>
-                <Button size="xl" justify="center" leftSection={<IconBrandBandcamp size={32}/>} variant="default"
-                        mt="md"
-                        radius="xl">
-                    Bandcamp
-                </Button>
+                {buttons.map(({label, icon, color}, idx) => {
+                    const {hovered, ref} = useHover();
+                    return (
+                        <div key={idx} ref={ref}>
+                            <Button
+                                size="xl"
+                                justify="center"
+                                leftSection={icon}
+                                variant={hovered ? "outline" : "default"}
+                                mt="md"
+                                color={color}
+                                radius="xl"
+                                style={{transition: 'all 0.2s ease'}}
+                            >
+                                {label}
+                            </Button>
+                        </div>
+                    );
+                })}
             </Flex>
         </div>
     );
