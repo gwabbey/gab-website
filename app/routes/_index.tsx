@@ -11,9 +11,21 @@ export const meta: MetaFunction = () => {
 };
 
 const buttons = [
-    {label: 'Spotify', icon: <IconBrandSpotify size={32}/>, color: 'green'},
-    {label: 'YouTube', icon: <IconBrandYoutube size={32}/>, color: 'red'},
-    {label: 'Bandcamp', icon: <IconBrandBandcamp size={32}/>, color: 'blue'},
+    {
+        label: 'Spotify', icon: <IconBrandSpotify size={32}/>,
+        color: 'green',
+        link: 'https://open.spotify.com/artist/038iYWhZBwm1mubQW0U5hB'
+    },
+    {
+        label: 'YouTube', icon: <IconBrandYoutube size={32}/>,
+        color: 'red',
+        link: 'https://www.youtube.com/channel/UCCclrfXfNMQKoPS_mXQSnNg'
+    },
+    {
+        label: 'Bandcamp', icon: <IconBrandBandcamp size={32}/>,
+        color: 'blue',
+        link: 'https://gwabbey.bandcamp.com'
+    },
 ];
 
 export default function Index() {
@@ -33,11 +45,14 @@ export default function Index() {
                     WebkitTextFillColor: 'transparent',
                     fontWeight: 700
                 }}>gab</h1>
-                {buttons.map(({label, icon, color}, idx) => {
+                {buttons.map(({label, icon, color, link}, id) => {
                     const {hovered, ref} = useHover();
                     return (
-                        <div key={idx} ref={ref}>
+                        <div key={id} ref={ref}>
                             <Button
+                                component="a"
+                                href={link}
+                                target="_blank"
                                 size="xl"
                                 justify="center"
                                 leftSection={icon}
