@@ -21,7 +21,7 @@ export default function App() {
             <ColorSchemeScript/>
         </head>
         <body>
-        <MantineProvider>
+        <MantineProvider defaultColorScheme="light">
             <Outlet/>
             <ScrollRestoration/>
             <Scripts/>
