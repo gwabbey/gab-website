@@ -1,7 +1,8 @@
 import type {MetaFunction} from "@remix-run/node";
-import {Button, Flex} from "@mantine/core";
+import {Button, Flex, Image} from "@mantine/core";
 import {IconBrandBandcamp, IconBrandSpotify, IconBrandYoutube} from "@tabler/icons-react";
 import {useHover} from "@mantine/hooks";
+import gabpaint from '../../public/images/gabpaint.png';
 
 export const meta: MetaFunction = () => {
     return [
@@ -40,11 +41,15 @@ export default function Index() {
             >
                 <h1 style={{
                     fontSize: "3rem",
+                    marginBottom: 0,
                     backgroundImage: 'linear-gradient(to right, rgb(249, 168, 212), rgb(216, 180, 254), rgb(129, 140, 248))',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                     fontWeight: 700
                 }}>gab</h1>
+
+                <Image src={gabpaint} alt="gab" w={200}/>
+
                 {buttons.map(({label, icon, color, link}, id) => {
                     const {hovered, ref} = useHover();
                     return (
