@@ -22,7 +22,7 @@ FROM deps AS prod-deps
 WORKDIR /app
 
 # Install only production dependencies
-RUN npm install --production
+RUN npm install --omit=dev
 
 # Final stage for running the app
 FROM base as runner
