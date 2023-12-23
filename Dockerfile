@@ -1,31 +1,44 @@
-# Use the official Bun image
-FROM oven/bun:latest AS base
+# Use a lighter base image for the production stage
+FROM node:20-alpine as base
 
-WORKDIR /usr/src/app
+# Intermediate stage for installing development dependencies
+FROM base as deps
+WORKDIR /app
+COPY package*.json ./
 
-# Install dependencies into temp directory
-# This will cache them and speed up future builds
-FROM base AS install
+# Install dependencies for development
+RUN npm install
 
-RUN mkdir -p /temp/prod
-COPY package.json bun.lockb /temp/prod/
-
-WORKDIR /temp/prod
-RUN bun install --frozen-lockfile --production
-
-# Copy node_modules from temp directory
-# Then copy all (non-ignored) project files into the image
-FROM base AS prerelease
-
-COPY --from=install /temp/prod/node_modules /usr/src/app/node_modules
+# Intermediate stage for building the app
+FROM deps AS builder
+WORKDIR /app
 COPY . .
 
-# Copy production dependencies and source code into the final image
-FROM base AS release
+# Build the app
+RUN npm run build
 
-COPY --from=prerelease /usr/src/app .
+# Intermediate stage for installing production dependencies
+FROM deps AS prod-deps
+WORKDIR /app
 
-# Run the app
-USER bun
-EXPOSE 3000/tcp
-ENTRYPOINT ["bun", "run", "index.ts"]
+# Install only production dependencies
+RUN npm install --production
+
+# Final stage for running the app
+FROM base as runner
+WORKDIR /app
+
+# Create a non-root user for running the app
+RUN addgroup --system --gid 1001 remix && \
+    adduser --system --uid 1001 remix
+
+USER remix
+
+# Copy production dependencies, build output, and public assets
+COPY --from=prod-deps --chown=remix:remix /app/package*.json ./
+COPY --from=prod-deps --chown=remix:remix /app/node_modules ./node_modules
+COPY --from=builder --chown=remix:remix /app/build ./build
+COPY --from=builder --chown=remix:remix /app/public ./public
+
+# Specify the entry point to start the app
+ENTRYPOINT ["node", "node_modules/.bin/remix-serve", "build/index.js"]
