@@ -1,0 +1,15 @@
+version: '3.5'
+
+networks:
+  web:
+    external: true
+
+services:
+  g3b.dev:
+    container_name: g3b.dev
+    build: .
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - web
